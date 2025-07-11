@@ -124,6 +124,11 @@ class FeatureWorkflowConfig(BaseSettings):
         metadata_dir.mkdir(parents=True, exist_ok=True)
         return metadata_dir
     
+    @property
+    def workspace_base_dir(self) -> Path:
+        """Get the base directory for all workspaces."""
+        return Path.cwd() / self.workspace.worktrees_dir
+    
     def get_worktree_dir(self, repo_path: Path) -> Path:
         """Get the worktrees directory for a given repository."""
         worktree_dir = repo_path / self.workspace.worktrees_dir

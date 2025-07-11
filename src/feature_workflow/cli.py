@@ -98,14 +98,17 @@ def workspace_clean(
 
 
 @app.command()
-def server_start(
-    host: str = typer.Option("localhost", "--host", "-h", help="Host to bind to"),
-    port: int = typer.Option(8000, "--port", "-p", help="Port to bind to"),
-):
+def server_start():
     """Start the MCP server."""
-    console.print(f"Starting Feature Workflow MCP Server on {host}:{port}")
-    # TODO: Implement MCP server startup
-    console.print("MCP server functionality not yet implemented")
+    console.print("Starting Feature Workflow MCP Server...")
+    
+    # Import and run the MCP server
+    from .server import main
+    
+    try:
+        main()
+    except KeyboardInterrupt:
+        console.print("\nMCP server stopped.")
 
 
 def main():

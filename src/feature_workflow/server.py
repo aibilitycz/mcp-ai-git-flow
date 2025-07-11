@@ -4,6 +4,8 @@ import asyncio
 import json
 from typing import Any, Dict, List, Optional
 
+from mcp.server.fastmcp import FastMCP
+
 from .config import config
 from .managers.workspace_manager import WorkspaceManager
 from .managers.git_manager import GitManager
@@ -232,3 +234,118 @@ class FeatureWorkflowServer:
                 "success": False,
                 "error": str(e)
             }
+
+
+# Initialize FastMCP server
+mcp = FastMCP("Feature Workflow MCP Server")
+
+# Global feature server instance
+feature_server = FeatureWorkflowServer()
+
+
+@mcp.tool()
+async def start_feature(
+    issue_id: str,
+    description: str,
+    base_branch: str = "main"
+) -> str:
+    """Create a new feature workspace using git worktrees.
+    
+    Args:
+        issue_id: Linear issue ID (e.g., AIM-123)
+        description: Brief description of the feature
+        base_branch: Base branch for the feature (defaults to main)
+    
+    Returns:
+        JSON string with workspace creation result
+    """
+    result = await feature_server.start_feature(
+        issue_id=issue_id,
+        description=description,
+        base_branch=base_branch
+    )
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+async def list_features() -> str:
+    """List all active feature workspaces.
+    
+    Returns:
+        JSON string with list of all workspaces
+    """
+    result = await feature_server.list_features()
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+async def switch_feature(workspace_name: str) -> str:
+    """Switch to a different feature workspace.
+    
+    Args:
+        workspace_name: Name of the workspace to switch to
+    
+    Returns:
+        JSON string with switch result
+    """
+    result = await feature_server.switch_feature(workspace_name)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+async def commit_feature(message: str, close_issue: bool = False) -> str:
+    """Commit changes in the active workspace.
+    
+    Args:
+        message: Commit message
+        close_issue: Whether this commit closes the issue
+    
+    Returns:
+        JSON string with commit result
+    """
+    result = await feature_server.commit_feature(
+        message=message,
+        close_issue=close_issue
+    )
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+async def feature_status() -> str:
+    """Get detailed status of the current feature.
+    
+    Returns:
+        JSON string with current feature status
+    """
+    result = await feature_server.feature_status()
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+async def cleanup_features(
+    older_than_days: int = 7,
+    completed_only: bool = True
+) -> str:
+    """Clean up old workspaces.
+    
+    Args:
+        older_than_days: Remove workspaces older than this many days
+        completed_only: Only clean up completed workspaces
+    
+    Returns:
+        JSON string with cleanup result
+    """
+    result = await feature_server.cleanup_features(
+        older_than_days=older_than_days,
+        completed_only=completed_only
+    )
+    return json.dumps(result, indent=2)
+
+
+def main():
+    """Main entry point for the MCP server."""
+    mcp.run(transport="stdio")
+
+
+if __name__ == "__main__":
+    main()

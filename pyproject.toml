@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
     # Core MCP and async
+    "mcp>=1.0.0",
     "pydantic>=2.10.0,<3.0.0",
     "pydantic-settings>=2.5.0,<3.0.0",
     "httpx>=0.27.0,<0.28.0",
