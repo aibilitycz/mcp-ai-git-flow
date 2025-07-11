@@ -22,7 +22,7 @@ An MCP (Model Context Protocol) server that automates parallel feature developme
 uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --help
 
 # For Claude Code
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --args server-start
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp server-start
 
 # For Cursor (.cursor/mcp.json)
 {
@@ -87,11 +87,10 @@ Use the Claude CLI to add the MCP server directly from GitHub:
 cd /path/to/your-project
 
 # Add the MCP server using uvx (no installation needed)
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --args server-start
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp server-start
 
 # With environment variables
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp \
-  --args server-start \
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp server-start \
   --env FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS=true \
   --env FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX=AIM
 
