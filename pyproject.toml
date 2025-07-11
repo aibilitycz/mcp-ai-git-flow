@@ -74,9 +74,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/aibility/feature-workflow-mcp"
-Repository = "https://github.com/aibility/feature-workflow-mcp.git"
-Issues = "https://github.com/aibility/feature-workflow-mcp/issues"
+Homepage = "https://github.com/aibilitycz/mcp-ai-git-flow"
+Repository = "https://github.com/aibilitycz/mcp-ai-git-flow.git"
+Issues = "https://github.com/aibilitycz/mcp-ai-git-flow/issues"
 
 [project.scripts]
 feature-workflow-mcp = "feature_workflow.cli:main"

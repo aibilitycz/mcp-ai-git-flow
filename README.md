@@ -19,17 +19,17 @@ An MCP (Model Context Protocol) server that automates parallel feature developme
 #### Method 1: Direct Installation via uv (Recommended)
 ```bash
 # Install and run directly (no cloning needed)
-uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --help
+uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --help
 
 # For Claude Code
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --args server-start
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --args server-start
 
 # For Cursor (.cursor/mcp.json)
 {
   "mcpServers": {
     "feature-workflow": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"]
+      "args": ["--from", "git+https://github.com/aibilitycz/mcp-ai-git-flow", "feature-workflow-mcp", "server-start"]
     }
   }
 }
@@ -48,8 +48,8 @@ uvx feature-workflow-mcp --help
 #### Method 3: Development Installation
 ```bash
 # Clone the repository for development
-git clone https://github.com/aibility/feature-workflow-mcp.git
-cd feature-workflow-mcp
+git clone https://github.com/aibilitycz/mcp-ai-git-flow.git
+cd mcp-ai-git-flow
 
 # Create and activate virtual environment
 python3 -m venv venv
@@ -87,10 +87,10 @@ Use the Claude CLI to add the MCP server directly from GitHub:
 cd /path/to/your-project
 
 # Add the MCP server using uvx (no installation needed)
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --args server-start
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp --args server-start
 
 # With environment variables
-claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp \
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibilitycz/mcp-ai-git-flow feature-workflow-mcp \
   --args server-start \
   --env FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS=true \
   --env FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX=AIM
@@ -107,7 +107,7 @@ Add to your Claude Code configuration (`.claude/mcp.json`):
   "servers": {
     "feature-workflow": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"],
+      "args": ["--from", "git+https://github.com/aibilitycz/mcp-ai-git-flow", "feature-workflow-mcp", "server-start"],
       "env": {
         "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
         "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM"
@@ -182,7 +182,7 @@ Create or update the MCP configuration file at `.cursor/mcp.json` in your projec
   "mcpServers": {
     "feature-workflow": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"],
+      "args": ["--from", "git+https://github.com/aibilitycz/mcp-ai-git-flow", "feature-workflow-mcp", "server-start"],
       "env": {
         "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
         "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM",
