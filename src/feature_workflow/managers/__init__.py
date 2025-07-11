@@ -1,0 +1,1 @@
+"""Core managers for workspace and git operations."""

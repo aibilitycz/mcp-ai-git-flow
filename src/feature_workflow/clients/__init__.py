@@ -1,0 +1,1 @@
+"""External API clients for GitHub/GitLab integration."""
