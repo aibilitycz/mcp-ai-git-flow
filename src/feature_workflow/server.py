@@ -344,7 +344,7 @@ async def cleanup_features(
 
 def main():
     """Main entry point for the MCP server."""
-    mcp.run(transport="stdio")
+    mcp.run()
 
 
 if __name__ == "__main__":

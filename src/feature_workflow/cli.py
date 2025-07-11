@@ -100,15 +100,14 @@ def workspace_clean(
 @app.command()
 def server_start():
     """Start the MCP server."""
-    console.print("Starting Feature Workflow MCP Server...")
-    
-    # Import and run the MCP server
+    # Import and run the MCP server directly without console output
+    # MCP servers communicate via stdin/stdout, so we can't print to stdout
     from .server import main
     
     try:
         main()
     except KeyboardInterrupt:
-        console.print("\nMCP server stopped.")
+        pass  # Exit silently on Ctrl+C
 
 
 def main():
