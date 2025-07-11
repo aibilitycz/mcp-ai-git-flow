@@ -16,8 +16,38 @@ An MCP (Model Context Protocol) server that automates parallel feature developme
 
 ### Installation
 
+#### Method 1: Direct Installation via uv (Recommended)
 ```bash
-# Clone the repository
+# Install and run directly (no cloning needed)
+uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --help
+
+# For Claude Code
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --args server-start
+
+# For Cursor (.cursor/mcp.json)
+{
+  "mcpServers": {
+    "feature-workflow": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"]
+    }
+  }
+}
+```
+
+#### Method 2: PyPI Installation (Coming Soon)
+```bash
+# Once published to PyPI
+pip install feature-workflow-mcp
+
+# Or with uv
+uv add feature-workflow-mcp
+uvx feature-workflow-mcp --help
+```
+
+#### Method 3: Development Installation
+```bash
+# Clone the repository for development
 git clone https://github.com/aibility/feature-workflow-mcp.git
 cd feature-workflow-mcp
 
@@ -49,8 +79,46 @@ feature-workflow-mcp workspace-clean --days 7
 
 ### 🧠 Claude Code Integration
 
-#### Step 1: Configure MCP Server
+#### Method 1: Claude CLI with uvx (Recommended)
+Use the Claude CLI to add the MCP server directly from GitHub:
+
+```bash
+# Navigate to your project directory
+cd /path/to/your-project
+
+# Add the MCP server using uvx (no installation needed)
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp --args server-start
+
+# With environment variables
+claude mcp add feature-workflow -- uvx --from git+https://github.com/aibility/feature-workflow-mcp feature-workflow-mcp \
+  --args server-start \
+  --env FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS=true \
+  --env FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX=AIM
+
+# Verify the server was added
+claude mcp list
+```
+
+#### Method 2: Manual Configuration with uvx
 Add to your Claude Code configuration (`.claude/mcp.json`):
+
+```json
+{
+  "servers": {
+    "feature-workflow": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"],
+      "env": {
+        "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
+        "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM"
+      }
+    }
+  }
+}
+```
+
+#### Method 3: Local Installation (Development)
+If you've installed locally:
 
 ```json
 {
@@ -59,7 +127,8 @@ Add to your Claude Code configuration (`.claude/mcp.json`):
       "command": "feature-workflow-mcp",
       "args": ["server-start"],
       "env": {
-        "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true"
+        "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
+        "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM"
       }
     }
   }
@@ -105,11 +174,57 @@ Claude: *uses switch_feature or start_feature MCP tool*
 ### 🖱️ Cursor IDE Integration
 
 #### Step 1: Setup MCP in Cursor
-1. Open Cursor settings
-2. Add MCP server configuration
-3. Enable the feature-workflow MCP server
 
-#### Step 2: Natural Language Workflow
+Create or update the MCP configuration file at `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "feature-workflow": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/aibility/feature-workflow-mcp", "feature-workflow-mcp", "server-start"],
+      "env": {
+        "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
+        "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM",
+        "FEATURE_WORKFLOW_WORKSPACE__WORKTREES_DIR": "worktrees",
+        "FEATURE_WORKFLOW_GIT__DEFAULT_BASE_BRANCH": "main"
+      }
+    }
+  }
+}
+```
+
+**Alternative (if installed locally):**
+```json
+{
+  "mcpServers": {
+    "feature-workflow": {
+      "command": "feature-workflow-mcp",
+      "args": ["server-start"],
+      "env": {
+        "FEATURE_WORKFLOW_WORKSPACE__SYNC_IDE_SETTINGS": "true",
+        "FEATURE_WORKFLOW_LINEAR__ISSUE_PREFIX": "AIM",
+        "FEATURE_WORKFLOW_WORKSPACE__WORKTREES_DIR": "worktrees",
+        "FEATURE_WORKFLOW_GIT__DEFAULT_BASE_BRANCH": "main"
+      }
+    }
+  }
+}
+```
+
+Alternative locations for the configuration file:
+- **Project-specific**: `.cursor/mcp.json` (recommended for project-specific workflows)
+- **Global**: `~/.cursor/mcp.json` (for use across all projects)
+
+#### Step 2: Verify MCP Server
+After creating the configuration:
+
+1. **Restart Cursor** to load the new MCP server
+2. **Open the project** where you added the configuration
+3. **Check Cursor's output panel** for MCP server logs
+4. **Test the integration** by asking Cursor to list features or start a new feature
+
+#### Step 3: Natural Language Workflow
 ```bash
 # In your main project with Cursor AI
 User: "Create a new feature workspace for implementing payment processing (AIM-124)"
@@ -122,7 +237,7 @@ Cursor AI: "I've created a worktree at ./worktrees/aim-124-payment-processing
 # All extensions, settings, and AI context work normally
 ```
 
-#### Step 3: Parallel Development
+#### Step 4: Parallel Development
 ```bash
 # Multiple Cursor windows can work on different features simultaneously
 Window 1: ./worktrees/aim-123-auth (Authentication feature)
@@ -200,6 +315,50 @@ AI: *starts new worktree for next feature*
 - **Cursor**: `.cursor/` AI context, custom prompts, preferences  
 - **IntelliJ/PyCharm**: `.idea/` project settings, code styles
 - **Custom configs**: Add to `FEATURE_WORKFLOW_WORKSPACE__IDE_CONFIG_DIRS`
+
+### 🔧 Troubleshooting MCP Setup
+
+#### Common Issues:
+
+**1. "MCP server not found" error:**
+```bash
+# Ensure the package is installed
+pip install -e .
+
+# Verify the command is available
+which feature-workflow-mcp
+
+# Check if virtual environment is activated
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+**2. "Permission denied" errors:**
+```bash
+# Make sure the script is executable
+chmod +x $(which feature-workflow-mcp)
+```
+
+**3. Cursor not loading MCP configuration:**
+- Restart Cursor completely after adding `.cursor/mcp.json`
+- Check the configuration file syntax with a JSON validator
+- Verify the file is in the correct location (project root or `~/.cursor/`)
+- Check Cursor's output panel for error messages
+
+**4. Claude CLI issues:**
+```bash
+# Update Claude CLI to latest version
+claude --version
+
+# Re-add the MCP server if needed
+claude mcp remove feature-workflow
+claude mcp add feature-workflow feature-workflow-mcp --args server-start
+```
+
+**5. Environment variables not loading:**
+- Create a `.env` file based on `.env.example`
+- Ensure environment variables are properly set
+- Restart the IDE after changing environment configuration
 
 ## Linear Integration
 
